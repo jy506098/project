@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ item_name }} - 教程</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="{% if has_cyber_tshirt %}cyber-tshirt{% endif %}">
+    <nav class="navbar">
+        <div class="nav-brand">📋 留言板</div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}">首页</a></li>
+            <li><a href="{{ url_for('message_board') }}">留言板</a></li>
+            <li><a href="{{ url_for('store') }}">商店</a></li>
+            <li><a href="{{ url_for('inventory') }}">背包</a></li>
+            <li><a href="{{ url_for('tasks_page') }}">任务</a></li>
+            {% if username and '游戏手柄' in unlocked_content %}
+            <li><a href="{{ url_for('game_center') }}">游戏</a></li>
+            {% endif %}
+            {% if username and '影视播放器' in unlocked_content %}
+            <li><a href="{{ url_for('video_player') }}">影视</a></li>
+            {% endif %}
+        </ul>
+        <div class="nav-user">
+            {% if has_clock %}<span class="nav-clock" id="navClock">--:--:--</span>{% endif %}
+            <span class="nav-username">{{ username }}</span>
+            <a href="{{ url_for('settings') }}" class="btn btn-sm">设置</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-sm btn-ghost">退出</a>
+        </div>
+    </nav>
+
+    <main class="container tutorial-page">
+        <h1>⌨️ {{ item_name }}</h1>
+        <p class="muted">共 314 集 · 循序渐进 · 高性能编程</p>
+
+        <article class="tutorial-content">
+            <h2>第 1 集 · Hello World</h2>
+            <pre><code class="language-cpp">#include &lt;iostream&gt;
+
+int main() {
+    std::cout &lt;&lt; "Hello, World!" &lt;&lt; std::endl;
+    return 0;
+}</code></pre>
+
+            <h2>第 5 集 · 变量与类型</h2>
+            <pre><code class="language-cpp">int age = 18;
+double pi = 3.14159;
+char grade = 'A';
+bool is_active = true;
+std::string name = "Alice";</code></pre>
+
+            <h2>第 20 集 · 指针与引用</h2>
+            <pre><code class="language-cpp">int x = 42;
+int* p = &amp;x;     // p 指向 x
+int&amp; r = x;      // r 是 x 的引用
+*p = 100;          // 通过指针修改 x</code></pre>
+
+            <h2>第 50 集 · 面向对象</h2>
+            <pre><code class="language-cpp">class Animal {
+public:
+    virtual void speak() = 0;  // 纯虚函数
+};
+
+class Dog : public Animal {
+public:
+    void speak() override { std::cout &lt;&lt; "Woof!\n"; }
+};</code></pre>
+
+            <h2>第 100 集 · 模板与泛型</h2>
+            <pre><code class="language-cpp">template&lt;typename T&gt;
+T add(T a, T b) { return a + b; }
+
+auto result = add(3, 5);        // 8
+auto str = add(std::string("Hi,"), std::string(" World"));</code></pre>
+
+            <h2>学习建议</h2>
+            <ul>
+                <li>每集务必亲手敲一遍代码</li>
+                <li>完成配套练习题</li>
+                <li>理解底层原理，避免死记硬背</li>
+                <li>尝试用 C++ 重写一个你熟悉的 Python 小项目</li>
+            </ul>
+        </article>
+
+        <div class="tutorial-foot">
+            <a href="{{ url_for('inventory') }}" class="btn">← 返回背包</a>
+            <a href="{{ url_for('home') }}" class="btn btn-primary">返回首页</a>
+        </div>
+    </main>
+
+    <canvas id="mouseTrailCanvas" class="mouse-trail-canvas {% if not mouse_effect_enabled %}hidden{% endif %}"></canvas>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

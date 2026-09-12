@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ item_name }} - 教程</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="{% if has_cyber_tshirt %}cyber-tshirt{% endif %}">
+    <nav class="navbar">
+        <div class="nav-brand">📋 留言板</div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}">首页</a></li>
+            <li><a href="{{ url_for('message_board') }}">留言板</a></li>
+            <li><a href="{{ url_for('store') }}">商店</a></li>
+            <li><a href="{{ url_for('inventory') }}">背包</a></li>
+            <li><a href="{{ url_for('tasks_page') }}">任务</a></li>
+            {% if username and '游戏手柄' in unlocked_content %}
+            <li><a href="{{ url_for('game_center') }}">游戏</a></li>
+            {% endif %}
+            {% if username and '影视播放器' in unlocked_content %}
+            <li><a href="{{ url_for('video_player') }}">影视</a></li>
+            {% endif %}
+        </ul>
+        <div class="nav-user">
+            {% if has_clock %}<span class="nav-clock" id="navClock">--:--:--</span>{% endif %}
+            <span class="nav-username">{{ username }}</span>
+            <a href="{{ url_for('settings') }}" class="btn btn-sm">设置</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-sm btn-ghost">退出</a>
+        </div>
+    </nav>
+
+    <main class="container tutorial-page">
+        <h1>🚀 {{ item_name }}</h1>
+        <p class="muted">Node.js 服务端开发 · 异步编程 · 高性能</p>
+
+        <article class="tutorial-content">
+            <h2>1. 第一个 HTTP 服务</h2>
+            <pre><code class="language-js">const http = require('http');
+
+const server = http.createServer((req, res) =&gt; {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello from Node.js!');
+});
+
+server.listen(3000, () =&gt; {
+    console.log('Server running at http://localhost:3000/');
+});</code></pre>
+
+            <h2>2. 文件系统操作</h2>
+            <pre><code class="language-js">const fs = require('fs').promises;
+
+async function readConfig() {
+    const data = await fs.readFile('config.json', 'utf8');
+    return JSON.parse(data);
+}</code></pre>
+
+            <h2>3. Express 框架</h2>
+            <pre><code class="language-js">const express = require('express');
+const app = express();
+
+app.get('/api/users', (req, res) =&gt; {
+    res.json([{ name: 'Alice' }, { name: 'Bob' }]);
+});
+
+app.listen(3000);</code></pre>
+
+            <h2>4. 异步流程控制</h2>
+            <pre><code class="language-js">// Promise 链
+fetchUser(id)
+    .then(user =&gt; fetchPosts(user.id))
+    .then(posts =&gt; render(posts))
+    .catch(err =&gt; console.error(err));
+
+// async/await
+async function showUser(id) {
+    try {
+        const user = await fetchUser(id);
+        const posts = await fetchPosts(user.id);
+        render(posts);
+    } catch (err) {
+        console.error(err);
+    }
+}</code></pre>
+
+            <h2>5. npm 生态</h2>
+            <p>Node.js 的强大离不开 npm。常用包：</p>
+            <ul>
+                <li><code>express</code> - Web 框架</li>
+                <li><code>mongoose</code> - MongoDB ODM</li>
+                <li><code>axios</code> - HTTP 客户端</li>
+                <li><code>dotenv</code> - 环境变量管理</li>
+                <li><code>ws</code> - WebSocket 服务</li>
+            </ul>
+        </article>
+
+        <div class="tutorial-foot">
+            <a href="{{ url_for('inventory') }}" class="btn">← 返回背包</a>
+            <a href="{{ url_for('home') }}" class="btn btn-primary">返回首页</a>
+        </div>
+    </main>
+
+    <canvas id="mouseTrailCanvas" class="mouse-trail-canvas {% if not mouse_effect_enabled %}hidden{% endif %}"></canvas>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

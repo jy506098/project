@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ game_name }} - 游戏</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/snake.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/games.css') }}">
+</head>
+<body class="game-page {% if has_cyber_tshirt %}cyber-tshirt{% endif %}">
+    <nav class="navbar">
+        <div class="nav-brand">📋 留言板</div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}">首页</a></li>
+            <li><a href="{{ url_for('message_board') }}">留言板</a></li>
+            <li><a href="{{ url_for('store') }}">商店</a></li>
+            <li><a href="{{ url_for('inventory') }}">背包</a></li>
+            <li><a href="{{ url_for('tasks_page') }}">任务</a></li>
+            <li><a href="{{ url_for('game_center') }}" class="active">游戏</a></li>
+        </ul>
+        <div class="nav-user">
+            {% if has_clock %}<span class="nav-clock" id="navClock">--:--:--</span>{% endif %}
+            <span class="nav-username">{{ username }}</span>
+            <a href="{{ url_for('logout') }}" class="btn btn-sm btn-ghost">退出</a>
+        </div>
+    </nav>
+
+    <main class="container game-container">
+        <h1>{{ game_name }}</h1>
+
+        {# ========== 游戏分发 ========== #}
+        {% set game_key = game_name %}
+        {# 处理贪吃蛇联机 #}
+        {% if game_name == '贪吃蛇大作战' %}
+            <div class="snake-wrap">
+                <div class="snake-info">
+                    <span>房间: <strong id="roomName">default</strong></span>
+                    <span>连接: <strong id="connStatus" class="conn-disconnected">未连接</strong></span>
+                    <button class="btn btn-primary" id="joinBtn">加入房间</button>
+                </div>
+                <canvas id="snakeCanvas" width="800" height="600"></canvas>
+                <p class="muted">方向键 / WASD 控制移动</p>
+            </div>
+        {# 其他游戏 - canvas 容器 #}
+        {% else %}
+            <div class="game-wrap">
+                <canvas id="gameCanvas"></canvas>
+                <p class="muted game-controls-hint" id="gameControls"></p>
+            </div>
+        {% endif %}
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    {# 游戏脚本分发 #}
+    {% if game_name == '贪吃蛇大作战' %}
+        <script src="{{ url_for('static', filename='js/snake.js') }}"></script>
+    {% else %}
+        {# 通用框架 #}
+        <script src="{{ url_for('static', filename='js/games/_framework.js') }}"></script>
+        {# 各游戏脚本 - 与后端 GAME_LIST 中的 key 对应 #}
+        {% if game_name == '我的世界' %}
+            <script src="{{ url_for('static', filename='js/games/minecraft.js') }}"></script>
+        {% elif game_name == '成语接龙' %}
+            <script src="{{ url_for('static', filename='js/games/idiomchain.js') }}"></script>
+        {% elif game_name == '水果忍者' %}
+            <script src="{{ url_for('static', filename='js/games/fruitninja.js') }}"></script>
+        {% elif game_name == '抛硬币小游戏' %}
+            <script src="{{ url_for('static', filename='js/games/coin.js') }}"></script>
+        {% elif game_name == '打砖块' %}
+            <script src="{{ url_for('static', filename='js/games/breakout.js') }}"></script>
+        {% elif game_name == '飞扬的小鸟' %}
+            <script src="{{ url_for('static', filename='js/games/flappy.js') }}"></script>
+        {% elif game_name == '2048' %}
+            <script src="{{ url_for('static', filename='js/games/game2048.js') }}"></script>
+        {% elif game_name == '扫雷' %}
+            <script src="{{ url_for('static', filename='js/games/minesweeper.js') }}"></script>
+        {% elif game_name == '雷电战机' %}
+            <script src="{{ url_for('static', filename='js/games/shooter.js') }}"></script>
+        {% elif game_name == '杀戮尖塔' %}
+            <script>
+                // 该游戏尚未实现，提供简单占位
+                const cv = document.getElementById('gameCanvas');
+                cv.getContext('2d').fillText('杀戮尖塔 暂未实现，敬请期待', 50, 50);
+            </script>
+        {% else %}
+            <script>
+                alert('未知游戏：{{ game_name }}');
+            </script>
+        {% endif %}
+
+        {# 启动对应游戏 #}
+        <script>
+            (function () {
+                const cv = document.getElementById('gameCanvas');
+                if (!cv) return;
+                const name = {{ game_name|tojson }};
+                if (window.Games && typeof window.Games[name] === 'function') {
+                    window.Games[name](cv);
+                    const hint = document.getElementById('gameControls');
+                    if (hint) hint.textContent = {
+                        '抛硬币小游戏': '押正反 → 投掷硬币',
+                        '水果忍者': '鼠标拖动 / 触摸滑动 = 切水果 (切到炸弹💣会扣命)',
+                        '2048': '方向键 / WASD 移动合并方块',
+                        '俄罗斯方块': '←→ 移动 · ↑ 旋转 · ↓ 加速 · 空格 硬降',
+                        '飞扬的小鸟': '空格 / 点击 / 触摸 = 振翅',
+                        '打砖块': '←→ 移动挡板 · 鼠标跟随 · 空格 发射 (如有)',
+                        '扫雷': '左键翻开 · 右键标雷 · 长按触屏标雷',
+                        '雷电战机': '←→ 移动 · 空格 / ↑ 射击',
+                        '成语接龙': '点击游戏区获得焦点 → 输入成语 → 回车提交',
+                        '我的世界': 'WASD 移动 · 空格 跳 · 1-5 选方块 · 左键挖 · 右键放',
+                    }[name] || '';
+                }
+            })();
+        </script>
+    {% endif %}
+</body>
+</html>

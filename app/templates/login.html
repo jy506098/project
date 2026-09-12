@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 留言板</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="auth-page {% if has_cyber_tshirt %}cyber-tshirt{% endif %}">
+    <main class="auth-container">
+        <div class="auth-card">
+            <h1>🔐 登录</h1>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-area">
+                {% for category, msg in messages %}
+                <div class="flash flash-{{ category }}">{{ msg }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <form method="post" action="{{ url_for('login') }}" class="auth-form">
+                <input type="hidden" name="next" value="{{ next }}">
+                <label>
+                    <span>用户名</span>
+                    <input type="text" name="username" required autofocus>
+                </label>
+                <label>
+                    <span>密码</span>
+                    <input type="password" name="password" required>
+                </label>
+                <button type="submit" class="btn btn-primary btn-block">登录</button>
+            </form>
+            <p class="auth-foot">
+                还没有账号？<a href="{{ url_for('register') }}">立即注册</a>
+            </p>
+            <p class="auth-foot"><a href="{{ url_for('home') }}">← 返回首页</a></p>
+        </div>
+    </main>
+</body>
+</html>

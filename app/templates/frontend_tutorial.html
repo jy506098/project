@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ item_name }} - 教程</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="{% if has_cyber_tshirt %}cyber-tshirt{% endif %}">
+    <nav class="navbar">
+        <div class="nav-brand">📋 留言板</div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}">首页</a></li>
+            <li><a href="{{ url_for('message_board') }}">留言板</a></li>
+            <li><a href="{{ url_for('store') }}">商店</a></li>
+            <li><a href="{{ url_for('inventory') }}">背包</a></li>
+            <li><a href="{{ url_for('tasks_page') }}">任务</a></li>
+            {% if username and '游戏手柄' in unlocked_content %}
+            <li><a href="{{ url_for('game_center') }}">游戏</a></li>
+            {% endif %}
+            {% if username and '影视播放器' in unlocked_content %}
+            <li><a href="{{ url_for('video_player') }}">影视</a></li>
+            {% endif %}
+        </ul>
+        <div class="nav-user">
+            {% if has_clock %}<span class="nav-clock" id="navClock">--:--:--</span>{% endif %}
+            <span class="nav-username">{{ username }}</span>
+            <a href="{{ url_for('settings') }}" class="btn btn-sm">设置</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-sm btn-ghost">退出</a>
+        </div>
+    </nav>
+
+    <main class="container tutorial-page">
+        <h1>🌐 {{ item_name }}</h1>
+        <p class="muted">HTML + CSS + JavaScript · 零基础到部署</p>
+
+        <article class="tutorial-content">
+            <h2>1. HTML 骨架</h2>
+            <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-CN"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;我的网页&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello, 前端!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+            <h2>2. CSS 美化</h2>
+            <pre><code class="language-css">h1 {
+    color: #3498db;
+    text-align: center;
+    font-family: 'Helvetica', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    color: transparent;
+}</code></pre>
+
+            <h2>3. JavaScript 交互</h2>
+            <pre><code class="language-js">document.querySelector('h1').addEventListener('click', () =&gt; {
+    alert('你点我了!');
+});
+
+// ES6+ 语法糖
+const fetchData = async (url) =&gt; {
+    const res = await fetch(url);
+    return res.json();
+};</code></pre>
+
+            <h2>4. 响应式布局</h2>
+            <pre><code class="language-css">.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+}
+
+@media (max-width: 768px) {
+    .container { grid-template-columns: 1fr; }
+}</code></pre>
+
+            <h2>5. 部署上线</h2>
+            <ul>
+                <li>静态站点：Vercel / Netlify / GitHub Pages</li>
+                <li>构建工具：Vite / Webpack</li>
+                <li>现代框架：React / Vue / Svelte</li>
+                <li>CSS 框架：Tailwind / UnoCSS</li>
+            </ul>
+        </article>
+
+        <div class="tutorial-foot">
+            <a href="{{ url_for('inventory') }}" class="btn">← 返回背包</a>
+            <a href="{{ url_for('home') }}" class="btn btn-primary">返回首页</a>
+        </div>
+    </main>
+
+    <canvas id="mouseTrailCanvas" class="mouse-trail-canvas {% if not mouse_effect_enabled %}hidden{% endif %}"></canvas>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
