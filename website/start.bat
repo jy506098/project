@@ -34,8 +34,8 @@ if errorlevel 1 (
 echo [3/3] 启动服务...
 echo.
 echo 访问地址：
-echo   留言板首页:  http://localhost:5000/
-echo   贪吃蛇联机:  ws://localhost:5000/snake_ws
+echo   留言板首页:  http://localhost/
+echo   贪吃蛇联机:  ws://localhost/snake_ws
 echo.
 echo 按 Ctrl+C 停止服务
 echo.

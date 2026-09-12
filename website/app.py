@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 留言板 Web 应用 (含贪吃蛇联机服务器)
-Flask HTTP 应用 (端口 5000) + WebSocket 联机服务器 (端口 8080)
+Flask HTTP 应用 (端口 80) + WebSocket 联机服务器 (端口 8080)
 二者通过 gevent 在同一进程中并行运行。
 """
 # gevent monkey 补丁必须在所有其他导入之前！
@@ -994,15 +994,15 @@ def video_player():
 #  贪吃蛇大作战 联机服务器 (WebSocket)
 #  说明：联机服务器实现位于 snake_server.py。
 #        本项目采用"同端口多路复用"架构：Flask HTTP 和贪吃蛇 WebSocket
-#        共用 5000 端口，WebSocket 路径为 /snake_ws。
+#        共用 80 端口，WebSocket 路径为 /snake_ws。
 #        访问地址：
-#            - 留言板首页:  http://<ip>:5000/
-#            - 贪吃蛇联机:  ws://<ip>:5000/snake_ws
+#            - 留言板首页:  http://<ip>:80/
+#            - 贪吃蛇联机:  ws://<ip>:80/snake_ws
 # =====================================================================
 
 if __name__ == "__main__":
     if GEVENT_AVAILABLE:
-        # 同一端口 (5000) 同时提供 HTTP 和 WebSocket
+        # 同一端口 (80) 同时提供 HTTP 和 WebSocket
         from gevent import pywsgi
         try:
             from geventwebsocket.handler import WebSocketHandler
@@ -1020,21 +1020,21 @@ if __name__ == "__main__":
             print(f"⚠️  加载 snake_server 失败: {e} (贪吃蛇联机不可用)")
 
         handler_class = WebSocketHandler if (WebSocketHandler and _snake_mod) else None
-        http_server = pywsgi.WSGIServer(('0.0.0.0', 5000), app, log=None, error_log=None,
+        http_server = pywsgi.WSGIServer(('0.0.0.0', 80), app, log=None, error_log=None,
                                         handler_class=handler_class)
         # 挂载贪吃蛇 WebSocket 到 /snake_ws 路径
         if _snake_mod and handler_class:
             try:
                 _snake_mod.mount_into_wsgi_server(http_server, path='/snake_ws')
                 print("=" * 50)
-                print("[首页  ]       http://<ip>:5000/")
-                print("[贪吃蛇联机]   ws://<ip>:5000/snake_ws")
+                print("[首页  ]       http://<ip>:80/")
+                print("[贪吃蛇联机]   ws://<ip>:80/snake_ws")
                 print("=" * 50)
             except Exception as e:
                 print(f"⚠️  挂载贪吃蛇 WebSocket 失败: {e}")
         else:
             print("=" * 50)
-            print("[首页  ]       http://<ip>:5000/")
+            print("[首页  ]       http://<ip>:80/")
             print("[贪吃蛇联机]   不可用")
             print("=" * 50)
         http_server.serve_forever()
@@ -1042,4 +1042,4 @@ if __name__ == "__main__":
         # 标准 Flask 模式 (不启用联机服务)
         print("[警告] gevent 未安装，仅启动 Flask (贪吃蛇联机不可用)")
         print("安装方法: pip install gevent gevent-websocket")
-        app.run(debug=True, host='0.0.0.0', port=5000)
+        app.run(debug=True, host='0.0.0.0', port=80)
