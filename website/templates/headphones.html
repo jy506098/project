@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>降噪耳机</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/music.css') }}">
+</head>
+<body class="music-page {% if has_cyber_tshirt %}cyber-tshirt{% endif %}">
+    <nav class="navbar">
+        <div class="nav-brand">📋 留言板</div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}">首页</a></li>
+            <li><a href="{{ url_for('message_board') }}">留言板</a></li>
+            <li><a href="{{ url_for('store') }}">商店</a></li>
+            <li><a href="{{ url_for('inventory') }}">背包</a></li>
+            <li><a href="{{ url_for('tasks_page') }}">任务</a></li>
+            {% if username and '游戏手柄' in unlocked_content %}
+            <li><a href="{{ url_for('game_center') }}">游戏</a></li>
+            {% endif %}
+            {% if username and '影视播放器' in unlocked_content %}
+            <li><a href="{{ url_for('video_player') }}">影视</a></li>
+            {% endif %}
+        </ul>
+        <div class="nav-user">
+            {% if has_clock %}<span class="nav-clock" id="navClock">--:--:--</span>{% endif %}
+            <span class="nav-username">{{ username }}</span>
+            <a href="{{ url_for('settings') }}" class="btn btn-sm">设置</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-sm btn-ghost">退出</a>
+        </div>
+    </nav>
+
+    <main class="container music-page-container">
+        <h1>🎧 降噪耳机</h1>
+        <p class="muted">戴上耳机，选择适合的噪声模式，让世界安静下来</p>
+
+        <div class="music-player">
+            <div class="now-playing">
+                <div class="album-art" id="albumArt">🎧</div>
+                <div class="track-info">
+                    <h3 id="trackTitle">降噪模式</h3>
+                    <p id="trackGenre">— 选择一种噪声 —</p>
+                    <p id="trackDesc" class="muted small">降噪原理：通过合成特定频谱的噪声，掩盖环境中的杂音</p>
+                </div>
+            </div>
+
+            <div class="player-controls">
+                <div class="volume-control">
+                    <span>🔊</span>
+                    <input type="range" id="volumeSlider" min="0" max="100" value="50">
+                    <span id="volumeValue">50%</span>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary btn-lg" id="playBtn">▶ 开始降噪</button>
+                </div>
+                <div class="visualizer" id="visualizer"></div>
+            </div>
+
+            <div class="playlist-section">
+                <h3>🔇 噪声模式</h3>
+                <ul id="playlistEl" class="playlist"></ul>
+            </div>
+
+            <div class="headphone-tips">
+                <h3>💡 使用建议</h3>
+                <ul>
+                    <li><strong>白噪声</strong>：适合办公室，集中注意力时推荐</li>
+                    <li><strong>粉红噪声</strong>：适合长时间使用，比白噪声柔和不刺耳</li>
+                    <li><strong>棕噪声</strong>：适合入睡，模拟海浪 / 风声</li>
+                    <li>建议戴耳机使用，效果更佳</li>
+                    <li>音量不宜过大，保护听力</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <canvas id="mouseTrailCanvas" class="mouse-trail-canvas {% if not mouse_effect_enabled %}hidden{% endif %}"></canvas>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/music_library.js') }}"></script>
+    <script>
+        // 仅显示降噪相关 tracks
+        if (window.Music) {
+            window.Music.tracks = window.Music.tracks.filter(t => t.id.startsWith('noise-'));
+            // 更新名称
+            window.Music.tracks.forEach(t => {
+                if (t.id === 'noise-white') t.name = '⚪ 白噪声 - 降噪专注';
+                if (t.id === 'noise-pink')  t.name = '🩷 粉红噪声 - 柔和舒适';
+                if (t.id === 'noise-brown') t.name = '🟫 棕噪声 - 助眠';
+            });
+        }
+    </script>
+    <script src="{{ url_for('static', filename='js/music.js') }}"></script>
+</body>
+</html>

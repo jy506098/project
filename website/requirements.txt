@@ -1,0 +1,9 @@
+# 留言板 + 贪吃蛇联机 - Python 依赖
+# 安装：pip install -r requirements.txt
+
+Flask>=2.3,<4.0
+Werkzeug>=2.3,<4.0
+
+# 联机服务所需（HTTP 与 WebSocket 共用 5000 端口）
+gevent>=23.0
+gevent-websocket>=0.10.1

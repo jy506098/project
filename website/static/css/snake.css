@@ -1,0 +1,77 @@
+/* ===========================================
+   贪吃蛇联机 - 赛博朋克青色主题
+   =========================================== */
+
+.game-page {
+    background:
+        radial-gradient(ellipse at top, rgba(102, 252, 241, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at bottom right, rgba(247, 37, 133, 0.1) 0%, transparent 50%),
+        var(--bg-1);
+    color: var(--text);
+    min-height: 100vh;
+}
+.game-page .navbar {
+    background: rgba(10, 14, 39, 0.9);
+    border-bottom-color: var(--cyan);
+}
+.game-page .nav-brand { color: var(--cyan); }
+
+.game-container { padding: 1rem 1.5rem 3rem; max-width: 900px; }
+
+.snake-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(102, 252, 241, 0.2);
+    clip-path: polygon(
+        0 12px, 12px 0,
+        calc(100% - 12px) 0, 100% 12px,
+        100% calc(100% - 12px), calc(100% - 12px) 100%,
+        12px 100%, 0 calc(100% - 12px)
+    );
+}
+.snake-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding: .75rem 1rem;
+    background: rgba(102, 252, 241, 0.05);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    flex-wrap: wrap;
+}
+.snake-info span {
+    color: var(--text-muted);
+    font-size: .9rem;
+    font-family: var(--font-mono);
+}
+.snake-info strong {
+    color: var(--cyan-bright);
+    text-shadow: 0 0 5px var(--cyan);
+    margin-left: .25rem;
+}
+.conn-disconnected { color: var(--red) !important; text-shadow: 0 0 5px var(--red) !important; }
+.conn-connected { color: var(--green) !important; text-shadow: 0 0 5px var(--green) !important; }
+
+#snakeCanvas {
+    background: #050816;
+    border: 2px solid var(--cyan);
+    border-radius: var(--radius-sm);
+    box-shadow:
+        0 0 30px rgba(102, 252, 241, 0.4),
+        inset 0 0 30px rgba(102, 252, 241, 0.05);
+    max-width: 100%;
+    height: auto;
+}
+
+.placeholder-game {
+    text-align: center;
+    padding: 4rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+}
+.placeholder-game p { margin-bottom: 1.5rem; }

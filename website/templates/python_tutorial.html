@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ item_name }} - 教程</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="{% if has_cyber_tshirt %}cyber-tshirt{% endif %}">
+    <nav class="navbar">
+        <div class="nav-brand">📋 留言板</div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}">首页</a></li>
+            <li><a href="{{ url_for('message_board') }}">留言板</a></li>
+            <li><a href="{{ url_for('store') }}">商店</a></li>
+            <li><a href="{{ url_for('inventory') }}">背包</a></li>
+            <li><a href="{{ url_for('tasks_page') }}">任务</a></li>
+            {% if username and '游戏手柄' in unlocked_content %}
+            <li><a href="{{ url_for('game_center') }}">游戏</a></li>
+            {% endif %}
+            {% if username and '影视播放器' in unlocked_content %}
+            <li><a href="{{ url_for('video_player') }}">影视</a></li>
+            {% endif %}
+        </ul>
+        <div class="nav-user">
+            {% if has_clock %}<span class="nav-clock" id="navClock">--:--:--</span>{% endif %}
+            <span class="nav-username">{{ username }}</span>
+            <a href="{{ url_for('settings') }}" class="btn btn-sm">设置</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-sm btn-ghost">退出</a>
+        </div>
+    </nav>
+
+    <main class="container tutorial-page">
+        <h1>🐍 {{ item_name }}</h1>
+        <p class="muted">语法简洁 · 生态丰富 · 入门首选</p>
+
+        <article class="tutorial-content">
+            <h2>第 1 课 · Hello Python</h2>
+            <pre><code class="language-python">print("Hello, Python!")
+
+name = input("What's your name? ")
+print(f"Hi, {name}!")</code></pre>
+
+            <h2>第 3 课 · 数据类型</h2>
+            <pre><code class="language-python"># 列表
+fruits = ["apple", "banana", "cherry"]
+fruits.append("date")
+
+# 字典
+user = {"name": "Alice", "age": 30, "admin": True}
+
+# 集合
+unique_tags = {"python", "flask", "web"}
+
+# 元组
+point = (10, 20)</code></pre>
+
+            <h2>第 5 课 · 控制流</h2>
+            <pre><code class="language-python">for fruit in fruits:
+    if fruit.startswith("a"):
+        print(fruit.upper())
+
+# 列表推导式
+squares = [x**2 for x in range(10) if x % 2 == 0]
+
+# 字典推导式
+lengths = {f: len(f) for f in fruits}</code></pre>
+
+            <h2>第 8 课 · 函数与装饰器</h2>
+            <pre><code class="language-python">def timer(func):
+    import time
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        print(f"{func.__name__} took {time.time()-start:.2f}s")
+        return result
+    return wrapper
+
+@timer
+def slow_op():
+    time.sleep(1)</code></pre>
+
+            <h2>第 10 课 · 模块与包</h2>
+            <pre><code class="language-python"># 导入标准库
+import json
+from pathlib import Path
+from datetime import datetime
+
+# 第三方包
+import requests
+import pandas as pd
+
+# 自定义模块
+from myproject.utils import helper</code></pre>
+
+            <h2>下一步</h2>
+            <p>掌握基础后，可以学习：</p>
+            <ul>
+                <li>Web 开发：Flask / Django / FastAPI</li>
+                <li>数据处理：pandas / numpy</li>
+                <li>爬虫：requests + BeautifulSoup</li>
+                <li>自动化：selenium / playwright</li>
+                <li>机器学习：scikit-learn / PyTorch</li>
+            </ul>
+        </article>
+
+        <div class="tutorial-foot">
+            <a href="{{ url_for('inventory') }}" class="btn">← 返回背包</a>
+            <a href="{{ url_for('home') }}" class="btn btn-primary">返回首页</a>
+        </div>
+    </main>
+
+    <canvas id="mouseTrailCanvas" class="mouse-trail-canvas {% if not mouse_effect_enabled %}hidden{% endif %}"></canvas>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

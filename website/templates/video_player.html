@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>影视中心 - 留言板</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="{% if has_cyber_tshirt %}cyber-tshirt{% endif %}">
+    <nav class="navbar">
+        <div class="nav-brand">📋 留言板</div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}">首页</a></li>
+            <li><a href="{{ url_for('message_board') }}">留言板</a></li>
+            <li><a href="{{ url_for('store') }}">商店</a></li>
+            <li><a href="{{ url_for('inventory') }}">背包</a></li>
+            <li><a href="{{ url_for('tasks_page') }}">任务</a></li>
+            {% if username and '游戏手柄' in unlocked_content %}
+            <li><a href="{{ url_for('game_center') }}">游戏</a></li>
+            {% endif %}
+            <li><a href="{{ url_for('video_player') }}" class="active">影视</a></li>
+        </ul>
+        <div class="nav-user">
+            {% if has_clock %}<span class="nav-clock" id="navClock">--:--:--</span>{% endif %}
+            <span class="nav-username">{{ username }}</span>
+            <a href="{{ url_for('settings') }}" class="btn btn-sm">设置</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-sm btn-ghost">退出</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h1>🎬 影视中心</h1>
+        <p class="muted">已解锁影视播放器，享受高清观影体验</p>
+
+        <div class="video-section">
+            <video id="videoPlayer" controls class="video-player" poster="">
+                <source src="" type="video/mp4">
+                您的浏览器不支持视频播放。
+            </video>
+
+            <div class="video-list">
+                <h3>📺 推荐内容</h3>
+                <ul class="video-grid">
+                    <li class="video-card">
+                        <div class="video-thumb">🎬</div>
+                        <span>示例视频 1</span>
+                    </li>
+                    <li class="video-card">
+                        <div class="video-thumb">📺</div>
+                        <span>示例视频 2</span>
+                    </li>
+                    <li class="video-card">
+                        <div class="video-thumb">🎥</div>
+                        <span>示例视频 3</span>
+                    </li>
+                </ul>
+                <p class="muted small">注：当前为示例页面，实际视频源可由管理员配置</p>
+            </div>
+        </div>
+    </main>
+
+    <canvas id="mouseTrailCanvas" class="mouse-trail-canvas {% if not mouse_effect_enabled %}hidden{% endif %}"></canvas>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

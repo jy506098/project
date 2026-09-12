@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+
+# Virtual environments
+.venv/
+.python-version
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Sensitive / runtime data
+users.json
+messages.json
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Node (in case)
+node_modules/
+.npm
+.yarn

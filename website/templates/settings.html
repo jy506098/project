@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设置 - 留言板</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="{% if has_cyber_tshirt %}cyber-tshirt{% endif %}">
+    <nav class="navbar">
+        <div class="nav-brand">📋 留言板</div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}">首页</a></li>
+            <li><a href="{{ url_for('message_board') }}">留言板</a></li>
+            <li><a href="{{ url_for('store') }}">商店</a></li>
+            <li><a href="{{ url_for('inventory') }}">背包</a></li>
+            <li><a href="{{ url_for('tasks_page') }}">任务</a></li>
+            {% if username and '游戏手柄' in unlocked_content %}
+            <li><a href="{{ url_for('game_center') }}">游戏</a></li>
+            {% endif %}
+            {% if username and '影视播放器' in unlocked_content %}
+            <li><a href="{{ url_for('video_player') }}">影视</a></li>
+            {% endif %}
+        </ul>
+        <div class="nav-user">
+            {% if has_clock %}<span class="nav-clock" id="navClock">--:--:--</span>{% endif %}
+            <span class="nav-username">{{ username }}</span>
+            <span class="nav-points">💰 {{ points }}</span>
+            <a href="{{ url_for('settings') }}" class="btn btn-sm active">设置</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-sm btn-ghost">退出</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-area">
+            {% for category, msg in messages %}
+            <div class="flash flash-{{ category }}">{{ msg }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <h1>⚙️ 设置</h1>
+
+        <section class="settings-section">
+            <h2>当前头像</h2>
+            <div class="avatar-preview" id="avatarPreview"></div>
+            <p class="muted">值: <code id="avatarValue">{{ avatar }}</code></p>
+        </section>
+
+        <section class="settings-section">
+            <h2>选择默认颜色</h2>
+            <div class="color-picker">
+                <button type="button" class="color-dot" data-color="#3498db" style="background:#3498db"></button>
+                <button type="button" class="color-dot" data-color="#e74c3c" style="background:#e74c3c"></button>
+                <button type="button" class="color-dot" data-color="#2ecc71" style="background:#2ecc71"></button>
+                <button type="button" class="color-dot" data-color="#9b59b6" style="background:#9b59b6"></button>
+                <button type="button" class="color-dot" data-color="#f39c12" style="background:#f39c12"></button>
+                <button type="button" class="color-dot" data-color="#1abc9c" style="background:#1abc9c"></button>
+                <button type="button" class="color-dot" data-color="#e91e63" style="background:#e91e63"></button>
+                <button type="button" class="color-dot" data-color="#34495e" style="background:#34495e"></button>
+            </div>
+        </section>
+
+        <section class="settings-section">
+            <h2>上传自定义头像</h2>
+            <form id="avatarUploadForm" enctype="multipart/form-data">
+                <input type="file" name="avatar_file" accept="image/*" required>
+                <button type="submit" class="btn btn-primary">上传</button>
+            </form>
+        </section>
+
+        <section class="settings-section">
+            <h2>修改密码</h2>
+            <form method="post" action="{{ url_for('settings') }}" class="auth-form">
+                <label>
+                    <span>原密码</span>
+                    <input type="password" name="old_password" required>
+                </label>
+                <label>
+                    <span>新密码 (8~16位)</span>
+                    <input type="password" name="new_password" minlength="8" maxlength="16" required>
+                </label>
+                <label>
+                    <span>确认新密码</span>
+                    <input type="password" name="confirm_password" minlength="8" maxlength="16" required>
+                </label>
+                <button type="submit" class="btn btn-primary">更新密码</button>
+            </form>
+        </section>
+
+        <section class="settings-section">
+            <h2>鼠标拖尾效果</h2>
+            <p class="muted">需先在背包使用 <strong>电竞鼠标</strong> 解锁</p>
+            <div class="mouse-config">
+                <label class="switch">
+                    <input type="checkbox" id="mouseEnabled" {% if mouse_effect_enabled %}checked{% endif %}>
+                    <span>启用拖尾</span>
+                </label>
+                <label>
+                    <span>颜色模式</span>
+                    <select id="colorMode">
+                        <option value="rainbow">彩虹</option>
+                        <option value="cyan">青色</option>
+                        <option value="random">随机</option>
+                    </select>
+                </label>
+                <label>
+                    <span>形状</span>
+                    <select id="shape">
+                        <option value="circle">圆形</option>
+                        <option value="square">方形</option>
+                        <option value="star">星形</option>
+                    </select>
+                </label>
+                <button type="button" class="btn" id="saveMouseConfig">保存</button>
+            </div>
+        </section>
+    </main>
+
+    <canvas id="mouseTrailCanvas" class="mouse-trail-canvas {% if not mouse_effect_enabled %}hidden{% endif %}"></canvas>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+</body>
+</html>
