@@ -36,7 +36,16 @@ echo.
 echo 提示：
 echo   - 关闭窗口即可同时退出后端进程
 echo   - 如不想显示控制台，可改用 pythonw.exe
+echo   - 共享数据：app/ 与 website/ 共享同一份 users.json / messages.json
 echo.
+
+REM 如果 users.json / messages.json 还没建立硬链接，先建上
+if not exist "users.json" if exist "..\website\users.json" (
+    mklink /H "users.json" "..\website\users.json" >nul 2>nul
+)
+if not exist "messages.json" if exist "..\website\messages.json" (
+    mklink /H "messages.json" "..\website\messages.json" >nul 2>nul
+)
 
 python desktop.py
 
