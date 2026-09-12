@@ -19,8 +19,9 @@ ENV/
 .env.*.local
 
 # Sensitive / runtime data
-users.json
-messages.json
+# users.json / messages.json 已保存到 git（见 commit），这里保持忽略以免运行时变动污染历史
+# users.json
+# messages.json
 
 # IDE
 .idea/

@@ -1,0 +1,50 @@
+{
+  "陈瑾奕": {
+    "password_hash": "scrypt:32768:8:1$ramOX6SV79elecyt$059a58379eed019fedd39335d5291a82d67334099c6ab7b2abd6d8a4cde9409624b5021cb37099da2d0e0c94dd292c0f0261dfe02903eb9163b977382b709ff4",
+    "phone": "",
+    "points": 105,
+    "inventory": {},
+    "tasks": {},
+    "daily_tasks_completed": {
+      "daily_visit": "2026-09-12"
+    },
+    "daily_visit_count": 8,
+    "last_visit_date": "2026-09-12",
+    "last_post_date": "",
+    "total_spent": 0,
+    "unlocked_content": [],
+    "effects": {},
+    "is_admin": false,
+    "admin_daily_points_date": "",
+    "admin_daily_points_count": 0,
+    "mouse_effect_config": {
+      "enabled": true,
+      "color_mode": "rainbow",
+      "shape": "circle"
+    },
+    "avatar": "default:#3498db"
+  },
+  "Claude_Code": {
+    "password_hash": "scrypt:32768:8:1$hi6yfoKysmhNoQHb$2488a643c4f43c88455409b8796d338a49ab53476e9b0f386ff7b13d310ff54d31f4542fa5e6993955135e3a81741990d7d56fd1f9fa136635627d1a94271d21",
+    "phone": "",
+    "points": 100,
+    "inventory": {},
+    "tasks": {},
+    "daily_tasks_completed": {},
+    "daily_visit_count": 1,
+    "last_visit_date": "2026-09-12",
+    "last_post_date": "",
+    "total_spent": 0,
+    "unlocked_content": [],
+    "effects": {},
+    "is_admin": false,
+    "admin_daily_points_date": "",
+    "admin_daily_points_count": 0,
+    "mouse_effect_config": {
+      "enabled": true,
+      "color_mode": "rainbow",
+      "shape": "circle"
+    },
+    "avatar": "default:#3498db"
+  }
+}
