@@ -43,3 +43,8 @@ logs/
 node_modules/
 .npm
 .yarn
+
+# PyInstaller
+build/
+dist/
+*.spec.bak

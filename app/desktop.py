@@ -33,7 +33,6 @@ logging.basicConfig(
 log = logging.getLogger('desktop')
 
 _HERE = Path(__file__).resolve().parent
-APP_PY = _HERE / 'app.py'
 
 # 默认端口：app.py 硬编码 5000。如果被占用就递增尝试。
 DEFAULT_PORT = 5000
@@ -83,21 +82,28 @@ def _wait_for_server(port: int, timeout: float = 15.0) -> bool:
 
 
 def _start_backend(port: int) -> subprocess.Popen:
-    """用 subprocess 跑 app.py，通过命令行参数让它监听指定端口。
+    """启动后端子进程。
 
-    注意：app.py 当前硬编码 5000，所以这里我们不传 port——而是 _pick_port
-    确保拿到 5000。如果未来 app.py 支持端口参数，只需在这里传进去。
+    关键：传 --backend 而不是脚本路径。
+    冻结后 PyInstaller bootloader 不接受脚本路径参数，
+    所以我们用 argv-flag 调度：同一个 exe 启动后端模式。
     """
-    python = sys.executable
-    log.info(f"启动后端: {python} {APP_PY} (port={port})")
+    # 冻结后 sys.executable 是 dist/MyApp/MyApp.exe 真实路径；
+    # 开发模式是 python.exe。两种情况都通过 --backend flag 复用 main.py 的调度逻辑。
+    exe = sys.executable
+    log.info(f"启动后端: {exe} --backend (port={port})")
     # CREATE_NEW_PROCESS_GROUP 让父进程能用 terminate() 干净杀掉
     creationflags = 0
     if os.name == 'nt':
         creationflags = subprocess.CREATE_NEW_PROCESS_GROUP
 
+    # cwd 必须是 app/ 所在目录（冻结时是 dist/MyApp/，开发时是 app/）
+    # 这样 app.py 内的 BASE_DIR = dirname(__file__) 能正确解析
+    cwd = str(_HERE)
+
     proc = subprocess.Popen(
-        [python, str(APP_PY)],
-        cwd=str(_HERE),
+        [exe, '--backend'],
+        cwd=cwd,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         bufsize=1,
